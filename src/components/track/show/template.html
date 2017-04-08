@@ -1,0 +1,42 @@
+<div class="content">
+    <mg-spinner v-if="fetching"></mg-spinner>
+
+    <div v-else-if="!track" class="notification is-danger">
+        Could not load track.
+    </div>
+    <div v-else>
+        <div class="columns">
+            <div class="column is-4">
+            </div>
+            <div class="column is-8">
+                <h3>{{ track.name }}</h3>
+                <p> <a>{{ track.maker }}</a> - {{ formatReleasedDate(track.released_at) }} </p>
+
+                <p>{{ track.description }}</p>
+            </div>
+        </div>
+
+        <h2>Download Links</h2>
+        <div class="box">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Link</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="linkInfo in track.download_links">
+                    <td>
+                        <a :href="linkInfo.link" class="collection-item" target="_blank">
+                            {{ truncateLink(linkInfo.link) }}
+                        </a>
+                    </td>
+                    <td>{{ linkInfo.description || '-' }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

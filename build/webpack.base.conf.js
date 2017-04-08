@@ -71,6 +71,24 @@ module.exports = {
         from: path.resolve(__dirname, '../node_modules/bulma/css'),
         to: config.build.assetsSubDirectory + '/bulma'
       }
+    ]),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../node_modules/toastr/build'),
+        to: config.build.assetsSubDirectory + '/toastr'
+      }
+    ]),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../node_modules/font-awesome/css'),
+        to: config.build.assetsSubDirectory + '/font-awesome/css'
+      }
+    ]),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../node_modules/font-awesome/fonts'),
+        to: config.build.assetsSubDirectory + '/font-awesome/fonts'
+      }
     ])
   ]
 }

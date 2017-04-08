@@ -1,0 +1,87 @@
+<div class="content">
+    <h1>Create a Track</h1>
+
+    <div class="field">
+        <label class="label">Name</label>
+
+        <p class="control">
+            <input class="input" type="text" v-model="name">
+        </p>
+    </div>
+
+    <div class="field">
+        <label class="label">Maker</label>
+
+        <p class="control">
+            <input class="input" type="text" v-model="maker">
+        </p>
+    </div>
+
+    <div class="field">
+        <label class="label">Released</label>
+
+        <p class="control">
+            <mg-date-picker v-model="releasedAt"></mg-date-picker>
+        </p>
+    </div>
+
+    <div class="field">
+        <label class="label">Description</label>
+
+        <p class="control">
+            <textarea class="textarea" v-model="description"></textarea>
+        </p>
+    </div>
+
+    <div class="field">
+        <label class="label">Download links</label>
+
+        <p class="control">
+            <button @click.prevent="addDownloadLink" class="button is-success">
+                Add Link
+            </button>
+        </p>
+
+        <table v-if="downloadLinks.length > 0">
+            <thead>
+            <tr>
+                <th>Link</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr v-for="(downloadLink, index) in downloadLinks">
+                <td>
+                    <input class="input" type="text" v-model="downloadLink.link">
+                </td>
+                <td>
+                    <input class="input" type="text" v-model="downloadLink.description"
+                           placeholder="high res, low res, ...">
+                </td>
+                <td>
+                    <button @click.prevent="removeDownloadLink(index)" class="button is-danger">
+                        <span class="icon">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <hr>
+
+    <div class="field is-grouped">
+        <p class="control">
+            <button class="button is-primary" @click.prevent="save">
+                Submit
+            </button>
+        </p>
+        <p class="control">
+            <router-link class="button is-link" :to="{ name: 'TrackList'}">
+                Cancel
+            </router-link>
+        </p>
+    </div>
+</div>
+

@@ -1,4 +1,4 @@
-import MgNavBar from '../global/nav-bar'
+import MgNavBar from './nav-bar'
 
 export default {
   name: 'app',
