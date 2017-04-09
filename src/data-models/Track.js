@@ -9,9 +9,10 @@ export class Track extends BaseDataModel {
   getFields () {
     return {
       _id: String,
+      image_id: String,
       name: String,
       released_at: Date,
-      maker: String,
+      creator: String,
       description: String,
       download_links: Array,
       reviews: Array

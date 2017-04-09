@@ -1,10 +1,13 @@
+import _ from 'lodash'
 import { FeathersPaginator } from '../data-models/FeathersPaginator'
 import { ServiceHelper } from '../library/Helpers/ServiceHelper'
 import { Toaster } from '../library/Toaster'
 import { Track } from '../data-models/Track'
+import { TrackImagesRepository } from './TrackImagesRepository'
 
 export class TracksRepository {
   constructor () {
+    this.imagesRepository = new TrackImagesRepository()
     this.tracksService = ServiceHelper.getClientFor('tracks')
   }
 
@@ -43,11 +46,30 @@ export class TracksRepository {
    * @returns {Promise.<T>}
    */
   create (data) {
-    return this.tracksService
-      .create(new Track(data).getDataWithoutId())
-      .then(result => {
-        Toaster.success('Track created successfully.')
-        console.log(result)
+    return this._createImage(data)
+      .then(imageId => {
+        console.log('id', imageId)
+        let trackData = _.omit(data, ['image'])
+        trackData.image_id = imageId
+
+        return this.tracksService
+          .create(new Track(trackData).getDataWithoutId())
+          .then(result => Toaster.success('Track created successfully.'))
       })
+  }
+
+  /**
+   *
+   * @param data
+   * @returns {Promise.<null|String>}
+   * @private
+   */
+  _createImage (data) {
+    if (!_.has(data, 'image')) {
+      return Promise.resolve(null)
+    }
+
+    return this.imagesRepository.create(data.image)
+      .then(result => result.id)
   }
 }

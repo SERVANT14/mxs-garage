@@ -1,4 +1,5 @@
 import { mapState, mapActions } from 'vuex'
+import { DateHelper } from '../../../library/Helpers/DateHelper'
 import { Toaster } from '../../../library/Toaster'
 import { TrackDownloadLink } from '../../../data-models/TrackDownloadLink'
 
@@ -7,34 +8,63 @@ export default {
 
   data () {
     return {
-      name: null,
-      releasedAt: null,
-      maker: null,
-      description: null,
-      downloadLinks: [new TrackDownloadLink()]
+      formData: {
+        name: null,
+        released_at: DateHelper.formatForPicker(Date.now()),
+        creator: null,
+        image: null,
+        description: null,
+        download_links: [new TrackDownloadLink()]
+      }
     }
   },
+
+  computed: mapState({
+    creating: state => state.tracks.creatingTrack
+  }),
 
   methods: {
     ...mapActions('tracks', ['createTrack']),
 
+    /**
+     * Save this track.
+     */
     save () {
-      this.createTrack({
-        name: this.name,
-        maker: this.maker,
-        released_at: this.releasedAt,
-        description: this.description,
-        download_links: this.downloadLinks
-      })
-        .catch(() => Toaster.error('There was an error creating this track.'))
+      this.$validator.validateAll()
+        .then(() => {
+          this.createTrack(this.formData)
+            .catch(() => Toaster.error('There was an error creating this track.'))
+        })
+        .catch(() => Toaster.error('Some fields failed to pass validation.'))
     },
 
+    /**
+     * Add a download link.
+     */
     addDownloadLink () {
-      this.downloadLinks.push(new TrackDownloadLink())
+      this.download_links.push(new TrackDownloadLink())
     },
 
+    /**
+     * Remove a download link.
+     *
+     * @param index
+     */
     removeDownloadLink (index) {
-      this.downloadLinks.splice(index, 1)
+      this.download_links.splice(index, 1)
+    },
+
+    /**
+     * Called when an image changed.
+     *
+     * @param event
+     */
+    imageChanged (event) {
+      this.formData.image = null
+      const haveFile = input => input.files && input.files.length > 0
+
+      if (haveFile(event.target))
+        this.formData.image = event.target.files[0]
     }
   }
 }

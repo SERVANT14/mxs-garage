@@ -2,6 +2,11 @@ import DatePicker from 'vue-bulma-datepicker'
 
 export default {
   components: {DatePicker},
+  props: {
+    value: {
+      type: String
+    }
+  },
 
   data () {
     return {

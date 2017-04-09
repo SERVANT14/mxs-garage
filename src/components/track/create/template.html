@@ -1,87 +1,110 @@
 <div class="content">
     <h1>Create a Track</h1>
 
-    <div class="field">
-        <label class="label">Name</label>
+    <mg-spinner v-if="creating"></mg-spinner>
+    <form v-else @submit.prevent="save">
+        <div class="field">
+            <label class="label">Name</label>
 
-        <p class="control">
-            <input class="input" type="text" v-model="name">
-        </p>
-    </div>
+            <p class="control">
+                <input
+                        type="text"
+                        name="name"
+                        class="input"
+                        :class="{'is-danger': errors.has('name')}"
+                        v-model="formData.name"
+                        v-validate="'required'"
+                >
+            </p>
+            <p class="help is-danger" v-show="errors.has('name')">{{ errors.first('name') }}</p>
+        </div>
 
-    <div class="field">
-        <label class="label">Maker</label>
+        <div class="field">
+            <label class="label">Creator</label>
 
-        <p class="control">
-            <input class="input" type="text" v-model="maker">
-        </p>
-    </div>
+            <p class="control">
+                <input class="input" type="text" v-model="formData.creator" v-validate="'required'">
+            </p>
+        </div>
 
-    <div class="field">
-        <label class="label">Released</label>
+        <div class="field">
+            <label class="label">Released</label>
 
-        <p class="control">
-            <mg-date-picker v-model="releasedAt"></mg-date-picker>
-        </p>
-    </div>
+            <p class="control">
+                <mg-date-picker v-model="formData.released_at"></mg-date-picker>
+            </p>
+        </div>
 
-    <div class="field">
-        <label class="label">Description</label>
+        <div class="field">
+            <label class="label">Image</label>
 
-        <p class="control">
-            <textarea class="textarea" v-model="description"></textarea>
-        </p>
-    </div>
+            <p class="control">
+                <input type="file" name="image" @change="imageChanged" ref="trackImage"
+                       v-validate="'required|mimes:image/*'">
+            </p>
+            <p class="help is-danger" v-show="errors.has('image')">{{ errors.first('image') }}</p>
+        </div>
 
-    <div class="field">
-        <label class="label">Download links</label>
+        <div class="field">
+            <label class="label">Description</label>
 
-        <p class="control">
-            <button @click.prevent="addDownloadLink" class="button is-success">
-                Add Link
-            </button>
-        </p>
+            <p class="control">
+                <textarea class="textarea" v-model="formData.description"></textarea>
+            </p>
+        </div>
 
-        <table v-if="downloadLinks.length > 0">
-            <thead>
-            <tr>
-                <th>Link</th>
-                <th>Description</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tr v-for="(downloadLink, index) in downloadLinks">
-                <td>
-                    <input class="input" type="text" v-model="downloadLink.link">
-                </td>
-                <td>
-                    <input class="input" type="text" v-model="downloadLink.description"
-                           placeholder="high res, low res, ...">
-                </td>
-                <td>
-                    <button @click.prevent="removeDownloadLink(index)" class="button is-danger">
+        <br>
+
+        <div class="field">
+            <label class="label">Download links</label>
+
+            <p class="control">
+                <button @click.prevent="addDownloadLink" class="button is-success">
+                    Add Link
+                </button>
+            </p>
+
+            <table v-if="formData.download_links.length > 0">
+                <thead>
+                <tr>
+                    <th>Link</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tr v-for="(downloadLink, index) in formData.download_links">
+                    <td>
+                        <input class="input" type="text" v-model="downloadLink.link">
+                    </td>
+                    <td>
+                        <input class="input" type="text" v-model="downloadLink.description"
+                               placeholder="high res, low res, ...">
+                    </td>
+                    <td>
+                        <button @click.prevent="removeDownloadLink(index)" class="button is-danger">
                         <span class="icon">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </span>
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </div>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    <hr>
+        <hr>
 
-    <div class="field is-grouped">
-        <p class="control">
-            <button class="button is-primary" @click.prevent="save">
-                Submit
-            </button>
-        </p>
-        <p class="control">
-            <router-link class="button is-link" :to="{ name: 'TrackList'}">
-                Cancel
-            </router-link>
-        </p>
-    </div>
+        <div class="field is-grouped">
+            <p class="control">
+                <button class="button is-primary" type="submit">
+                    Submit
+                </button>
+            </p>
+            <p class="control">
+                <router-link class="button is-link" :to="{ name: 'TrackList'}">
+                    Cancel
+                </router-link>
+            </p>
+        </div>
+    </form>
 </div>
 

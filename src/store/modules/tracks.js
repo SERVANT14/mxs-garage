@@ -3,8 +3,11 @@ import { TracksRepository } from '../../repositories/TracksRepository'
 const state = {
   fetchingTracksPage: false,
   tracksPaginator: null,
+
   fetchingTrack: false,
-  track: null
+  track: null,
+
+  creatingTrack: false
 }
 
 const getters = {}
@@ -76,15 +79,15 @@ const mutations = {
 
   // Create a track mutations.
   CREATE_TRACK_REQUEST (state) {
-    state.fetchingTrack = true
+    state.creatingTrack = true
     state.track = null
   },
   CREATE_TRACK_SUCCESS (state, {result}) {
-    state.fetchingTrack = false
+    state.creatingTrack = false
     state.track = result
   },
   CREATE_TRACK_FAILURE (state) {
-    state.fetchingTrack = false
+    state.creatingTrack = false
     state.track = null
   }
 }
