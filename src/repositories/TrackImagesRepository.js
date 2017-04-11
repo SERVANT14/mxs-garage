@@ -10,9 +10,10 @@ export class TrackImagesRepository {
    *
    * @returns {Promise.<T>}
    */
-  get (id) {
-    // return this.tracksService.get(id)
-    //   .then(result => new Track(result))
+  find (id) {
+    return id
+      ? this.trackImagesService.get(id)
+      : Promise.resolve(null)
   }
 
   /**

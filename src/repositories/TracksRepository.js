@@ -25,7 +25,7 @@ export class TracksRepository {
           $sort: {name: 1}
         }
       })
-      .then(result => new FeathersPaginator(result))
+      .then(result => new FeathersPaginator(result).mapDataTo(Track))
   }
 
   /**
@@ -33,9 +33,9 @@ export class TracksRepository {
    *
    * @returns {Promise.<T>}
    */
-  get (id) {
+  find (id) {
     return this.tracksService.get(id)
-      .then(result => new Track(result))
+      .then(result => new Track(result).populateRelationships())
   }
 
   /**
@@ -48,12 +48,11 @@ export class TracksRepository {
   create (data) {
     return this._createImage(data)
       .then(imageId => {
-        console.log('id', imageId)
         let trackData = _.omit(data, ['image'])
         trackData.image_id = imageId
 
         return this.tracksService
-          .create(new Track(trackData).getDataWithoutId())
+          .create(new Track(trackData).getDataWithoutIdOrRelationships())
           .then(result => Toaster.success('Track created successfully.'))
       })
   }

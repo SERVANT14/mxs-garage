@@ -7,6 +7,15 @@ export class BaseDataModel {
   }
 
   /**
+   * Gives you the value of the key field for this model.
+   *
+   * @returns {*}
+   */
+  getKey () {
+    return _.has(this, '_id') ? this._id : null
+  }
+
+  /**
    * Gives you the list of fields and their types.
    *
    * @returns {{}}
@@ -16,12 +25,33 @@ export class BaseDataModel {
   }
 
   /**
+   * Gives you the list of relationship fields and their types.
+   *
+   * @returns {{}}
+   */
+  getRelationshipFields () {
+    return {}
+  }
+
+  /**
    * Get this model's data without the id field.
    *
    * @returns {Object}
    */
-  getDataWithoutId () {
-    return _.omit(_.toPlainObject(this), '_id')
+  getDataWithoutIdOrRelationships () {
+    return _.omit(
+      _.toPlainObject(this),
+      ['_id', ..._.keys(this.getRelationshipFields())]
+    )
+  }
+
+  /**
+   * Populate model relationships.
+   *
+   * @returns {Promise.<BaseDataModel>}
+   */
+  populateRelationships () {
+    return Promise.resolve(this)
   }
 
   /**
@@ -32,13 +62,13 @@ export class BaseDataModel {
    */
   _hydrate (data) {
     _.forEach(this.getFields(), (type, name) => {
-      let value = null
+      this[name] = _.has(data, name)
+        ? BaseDataModel._castToType(data[name], type)
+        : null
+    })
 
-      if (_.has(data, name)) {
-        value = BaseDataModel._castToType(data[name], type)
-      }
-
-      this[name] = value
+    _.forEach(this.getRelationshipFields(), (type, name) => {
+      this[name] = _.has(data, name) ? data[name] : null
     })
   }
 

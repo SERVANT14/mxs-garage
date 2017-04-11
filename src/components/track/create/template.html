@@ -20,6 +20,20 @@
         </div>
 
         <div class="field">
+            <label class="label">Category</label>
+
+            <p class="control">
+                <span class="select">
+                    <select v-model="formData.category_id" v-validate="'required'">
+                        <option v-for="category in categories" :value="category.getKey()">
+                            {{ category.name }}
+                        </option>
+                    </select>
+                </span>
+            </p>
+        </div>
+
+        <div class="field">
             <label class="label">Creator</label>
 
             <p class="control">

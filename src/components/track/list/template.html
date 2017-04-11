@@ -11,9 +11,10 @@
     <div class="section">
         <mg-spinner v-if="fetching"></mg-spinner>
         <table v-else-if="paginator && paginator.total" class="table">
-            <router-link tag="tr" :to="{ name: 'TrackShow', params: {id: track._id} }"
-                         v-for="track in paginator.data"
-                         :key="track._id">
+            <router-link tag="tr" v-for="track in paginator.data"
+                         :to="{ name: 'TrackShow', params: {id: track.getKey()} }"
+                         :key="track.getKey()"
+                         class="clickable">
                 <td>{{ track.name }}</td>
             </router-link>
         </table>

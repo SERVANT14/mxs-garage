@@ -34,7 +34,7 @@ const actions = {
   fetchTrack ({commit}, id) {
     commit('FETCH_TRACK_REQUEST')
 
-    return new TracksRepository().get(id)
+    return new TracksRepository().find(id)
       .then(result => commit('FETCH_TRACK_SUCCESS', {result}))
       .catch(() => commit('FETCH_TRACK_FAILURE'))
   },
