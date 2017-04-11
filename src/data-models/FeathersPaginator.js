@@ -13,13 +13,14 @@ export class FeathersPaginator extends BaseDataModel {
   /**
    * Maps the data to the given data model.
    *
-   * @param {BaseDataModel} DataModel
+   * @param DataModel
    *
-   * @returns {FeathersPaginator}
+   * @returns {Promise<FeathersPaginator>}
    */
   mapDataTo (DataModel) {
     this.data = this.data.map(record => new DataModel(record))
 
-    return this
+    return Promise.all(this.data.map(model => model.populateRelationships()))
+      .then(() => this)
   }
 }

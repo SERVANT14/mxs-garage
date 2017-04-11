@@ -10,14 +10,31 @@
 
     <div class="section">
         <mg-spinner v-if="fetching"></mg-spinner>
-        <table v-else-if="paginator && paginator.total" class="table">
-            <router-link tag="tr" v-for="track in paginator.data"
+        <div v-else-if="paginator && paginator.total">
+            <router-link tag="div" v-for="track in paginator.data"
                          :to="{ name: 'TrackShow', params: {id: track.getKey()} }"
                          :key="track.getKey()"
-                         class="clickable">
-                <td>{{ track.name }}</td>
+                         class="clickable box">
+                <article class="columns">
+                    <div class="column is-3">
+                        <figure class="image">
+                            <img :src="track.image.uri">
+                        </figure>
+                    </div>
+                    <div class="column is-9">
+                        <div class="content">
+                            <p>
+                                <strong>{{ track.name }}</strong>
+                                <br v-if="track.category">
+                                <small v-if="track.category">{{ track.category.name }}</small>
+                                <br>
+                                <small>{{ track.creator }}</small>
+                            </p>
+                        </div>
+                    </div>
+                </article>
             </router-link>
-        </table>
+        </div>
         <div v-else class="notification is-warning">
             No tracks found.
         </div>
