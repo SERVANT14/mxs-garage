@@ -24,21 +24,31 @@
 
             <p class="control">
                 <span class="select">
-                    <select v-model="formData.category_id" v-validate="'required'">
+                    <select v-model="formData.category_id"
+                            v-validate="'required'"
+                            name="category">
                         <option v-for="category in categories" :value="category.getKey()">
                             {{ category.name }}
                         </option>
                     </select>
                 </span>
             </p>
+            <p class="help is-danger" v-show="errors.has('category')">{{ errors.first('category') }}</p>
         </div>
 
         <div class="field">
             <label class="label">Creator</label>
 
             <p class="control">
-                <input class="input" type="text" v-model="formData.creator" v-validate="'required'">
+                <input
+                        type="text"
+                        name="creator"
+                        class="input"
+                        :class="{'is-danger': errors.has('name')}"
+                        v-model="formData.creator"
+                        v-validate="'required'">
             </p>
+            <p class="help is-danger" v-show="errors.has('creator')">{{ errors.first('creator') }}</p>
         </div>
 
         <div class="field">

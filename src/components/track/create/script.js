@@ -51,7 +51,7 @@ export default {
      * Add a download link.
      */
     addDownloadLink () {
-      this.download_links.push(new TrackDownloadLink())
+      this.formData.download_links.push(new TrackDownloadLink())
     },
 
     /**
@@ -60,7 +60,7 @@ export default {
      * @param index
      */
     removeDownloadLink (index) {
-      this.download_links.splice(index, 1)
+      this.formData.download_links.splice(index, 1)
     },
 
     /**
@@ -78,6 +78,7 @@ export default {
 
         if (isTooBig(file)) {
           Toaster.error('File is too large. ' + parseInt(this.maxFileSize, 10) / 1000 + ' KB max.')
+          this.$refs.trackImage.value = ''
         } else {
           this.formData.image = file
         }
